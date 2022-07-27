@@ -13,16 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/home', function () {
-    return view('home');
-});
-
 Route::get('/', function () {
     return view('home');
-});
-
-Route::get('/welcome', function () {
-    return view('welcome');
 });
 
 Route::get('/trainers', function () {
@@ -31,6 +23,14 @@ Route::get('/trainers', function () {
 
 Route::get('/contact', function () {
     return view('contact');
+});
+
+Route::get('/bookings', function () {
+    return view('bookings');
+});
+
+Route::get('/home', function () {
+    return view('home');
 });
 
 Route::get('/dashboard', function () {
