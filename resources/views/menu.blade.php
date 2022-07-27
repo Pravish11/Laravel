@@ -1,5 +1,5 @@
 <nav>
-    <a href="home.php"><img class="logo" src="images/nav_bar_logo.png"></a>
+    <a href="{{url('home')}}"><img class="logo" src="images/nav_bar_logo.png"></a>
     <ul>
         <?php
         if (isset($_SESSION['firstname']))		//user has logged in
