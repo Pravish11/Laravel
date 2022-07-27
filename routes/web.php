@@ -29,6 +29,10 @@ Route::get('/trainers', function () {
     return view('trainers');
 });
 
+Route::get('/contact', function () {
+    return view('contact');
+});
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
