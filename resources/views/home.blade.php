@@ -1,7 +1,6 @@
 <?php
 session_start();
 //require_once "includes/db_connect.php";
-$_SESSION['redirectURL'] = $_SERVER['REQUEST_URI'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -1063,16 +1062,14 @@ $_SESSION['redirectURL'] = $_SERVER['REQUEST_URI'];
       <h4 style="text-align: center;">Be part of our family.</h4>
       <h4 style="text-align: center;">Be Great!</h4>
       <h4 style="text-align: center;">Be an <span style="color:rgb(6,0,255); font-weight: bold; font-size:30px; text-transform: uppercase;">Extremer!</span></h4>
-      <?php
-      if (!isset($_SESSION['firstname'])) {
-        echo "<a href='#all-comments'><button class='reg_button'>OUR RATINGS</button></a>";?>
-       
+      
+      @if (Auth::user()==null)
+        <a href="{{url('comment/')}}"><button class='reg_button'>OUR RATINGS</button></a>
         <a href="{{url('registration')}}"><button class='reg_button'>JOIN US</button></a>
-        <?php
-      } else {
-        echo "<h4 style='text-align:center;'>Welcome " . $_SESSION['firstname'] . "!</h4>";
-      }
-      ?>
+      @else
+      <h4 style='text-align:center;'>Welcome {{ Auth::user()->name }}</h4>
+      <a href="{{url('comment/')}}"><button class='reg_button'>OUR RATINGS</button></a>
+      @endif
     </div>
   </div>
   <br />
@@ -1485,154 +1482,7 @@ $_SESSION['redirectURL'] = $_SERVER['REQUEST_URI'];
 
   <!-----------------------------------Gallery ends here-------------------------------->
 
-  <!------------------comment section---------------------------------------------->
 
-  <div class="title">
-    <h5>COMMENTS</h5>
-    <h1>OUR CLIENT SAY'S</h1>
-    <p>Xtreme Fitness is more than just a gym. We are a training facility where you get <br>
-      expert help reaching your fitness goals.
-    </p>
-  </div>
-
-  <div class="comment-section">
-    <div class="comment-option">
-      <button id="all-commentsButton">ALL COMMENTS</button>
-      <button id="your-commentsButton">YOUR COMMENTS</button>
-    </div>
-
-    <div class="testimonial" id="all-comments">
-      <!----------------testimonial box container------------------->
-      <div class="testimonial-box-container">
-
-
-        <?php
-        $sQuery = "SELECT review.review_id,review.date_posted,review.rating,review.comment,user_details.firstname,user_details.lastname
-  FROM review,user_details
-  WHERE review.member_mail=user_details.email AND flag='0' AND ban='0'
-  ORDER BY rating DESC
-  LIMIT 3";
-        //$Result = $conn->query($sQuery);
-        $count = 0;
-        /*while ($value = $Result->fetch()) { ?>
-          <!-------------box 1-------------------------->
-          <div class="testimonial-box" id=<?php echo "box" . $value['review_id']; ?>>
-            <!-------------------------------top---------------------->
-            <div class="box-top">
-              <!------------------profile-------------------------------->
-              <div class="profile">
-                <div class="profile-img">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
-                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" />
-                  </svg>
-                </div>
-                <!-------------Name and date------------------------------->
-                <div class="name-user">
-                  <strong><?php echo $value['firstname'] . " " . $value['lastname']; ?></strong>
-                  <span><?php echo $value['date_posted']; ?></span>
-                </div>
-              </div>
-              <!------------------------------reviews----------------->
-              <div class="reviews">
-                <input type="radio" name=<?php echo "rating" . $count; ?> value="5" id="5" <?php if ($value['rating'] == "5") echo "checked"; ?>><label for="5">☆</label>
-                <input type="radio" name=<?php echo "rating" . $count; ?> value="4" id="4" <?php if ($value['rating'] == "4") echo "checked"; ?>><label for="4">☆</label>
-                <input type="radio" name=<?php echo "rating" . $count; ?> value="3" id="3" <?php if ($value['rating'] == "3") echo "checked"; ?>><label for="3">☆</label>
-                <input type="radio" name=<?php echo "rating" . $count; ?> value="2" id="2" <?php if ($value['rating'] == "2") echo "checked"; ?>><label for="2">☆</label>
-                <input type="radio" name=<?php echo "rating" . $count; ?> value="1" id="1" <?php if ($value['rating'] == "1") echo "checked"; ?>><label for="1">☆</label>
-              </div>
-              <?php
-              if (isset($_SESSION['username'])) { ?>
-                <span class="flag" id=<?php echo $value['review_id'];?> style="cursor: pointer;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="blue" class="bi bi-flag" viewBox="0 0 16 16">
-                    <path d="M14.778.085A.5.5 0 0 1 15 .5V8a.5.5 0 0 1-.314.464L14.5 8l.186.464-.003.001-.006.003-.023.009a12.435 12.435 0 0 1-.397.15c-.264.095-.631.223-1.047.35-.816.252-1.879.523-2.71.523-.847 0-1.548-.28-2.158-.525l-.028-.01C7.68 8.71 7.14 8.5 6.5 8.5c-.7 0-1.638.23-2.437.477A19.626 19.626 0 0 0 3 9.342V15.5a.5.5 0 0 1-1 0V.5a.5.5 0 0 1 1 0v.282c.226-.079.496-.17.79-.26C4.606.272 5.67 0 6.5 0c.84 0 1.524.277 2.121.519l.043.018C9.286.788 9.828 1 10.5 1c.7 0 1.638-.23 2.437-.477a19.587 19.587 0 0 0 1.349-.476l.019-.007.004-.002h.001M14 1.221c-.22.078-.48.167-.766.255-.81.252-1.872.523-2.734.523-.886 0-1.592-.286-2.203-.534l-.008-.003C7.662 1.21 7.139 1 6.5 1c-.669 0-1.606.229-2.415.478A21.294 21.294 0 0 0 3 1.845v6.433c.22-.078.48-.167.766-.255C4.576 7.77 5.638 7.5 6.5 7.5c.847 0 1.548.28 2.158.525l.028.01C9.32 8.29 9.86 8.5 10.5 8.5c.668 0 1.606-.229 2.415-.478A21.317 21.317 0 0 0 14 7.655V1.222z" />
-                  </svg></span>
-              <?php } ?>
-            </div>
-            <!-------------------comments------------------------------->
-            <div class="client-comment">
-              <p><?php echo $value['comment']; ?></p>
-            </div>
-          </div>
-                
-        <?php
-          $count = $count + 1;
-        } */?>
-
-
-      </div>
-    </div>
-
-
-
-
-    <!-----------your comments----------->
-    <?php
-    if (isset($_SESSION['username'])) { ?>
-      <div id="your-comments">
-        <table class="myTable">
-          <tr>
-            <th class="commentTable">Comment</th>
-            <th>Date Posted</th>
-            <th> </th>
-          </tr>
-          <br><br>
-          <?php
-          $mail = $_SESSION['username'];
-          $Query1 = "SELECT review_id,date_posted,comment
-          FROM review
-          WHERE member_mail = '$mail'
-          ORDER BY date_posted DESC";
-          $Result1 = $conn->query($Query1);
-    
-          while ($userValue = $Result1->fetch()) {?>
-            <tr id=<?php echo "tr".$userValue['review_id']; ?>>
-            <?php
-            echo "<td class='commentTable'>" . $userValue['comment'] . "</td>";
-            echo "<td class='tableAlign'>" . $userValue['date_posted'] . "</td>"; ?>
-            <td><button class="deleteButton" id=<?php echo $userValue['review_id']; ?>>Delete</button></td>
-          <?php
-            echo "</tr>";
-          } ?>
-
-
-        </table>
-
-        <form method="POST">
-
-          <fieldset style="width: 80%; margin:auto;">
-            <legend style="text-align: center;">
-              <h3>WRITE A REVIEW</h3>
-            </legend>
-            <div class="reviews" style="margin-left: 48%;">
-              <input type="radio" name="txt_rating" value="5" id="rate-5"><label for="rate-5">☆</label>
-              <input type="radio" name="txt_rating" value="4" id="rate-4"><label for="rate-4">☆</label>
-              <input type="radio" name="txt_rating" value="3" id="rate-3"><label for="rate-3">☆</label>
-              <input type="radio" name="txt_rating" value="2" id="rate-2"><label for="rate-2">☆</label>
-              <input type="radio" name="txt_rating" value="1" id="rate-1" required><label for="rate-1">☆</label>
-            </div><?php echo $ratingErr; ?>
-            <br><br>
-            <textarea name="txt_comment" placeholder='Add your review' required class="textareaReview" style="width:100%; border:none;"></textarea>
-            <?php $commentErr ?>
-            <br>
-            <div class="container">
-              <!--met delete dan comment box-->
-              <input type="submit" value="SUBMIT" class="button" style="cursor: pointer;" id="submit" />
-            </div>
-            
-            <br><br>
-            <span id="error"></span>
-          </fieldset>
-        </form>
-      </div>
-    <?php
-    }
-    ?>
-    <!--your comments end here-->
-  </div>
-
-
-
-
-  <!------------------------comments end---------------------------------------------->
   <?php //include 'includes/footer.php' ?>
   @include('footer')
 </body>

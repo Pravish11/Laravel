@@ -1,7 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ClassController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,8 +35,15 @@ Route::get('/home', function () {
     return view('home');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('/', function () {
+    return view('home');
+})->middleware(['auth'])->name('home');
 
 require __DIR__.'/auth.php';
+
+Route::resource("/student", StudentController::class);
+
+Route::resource("/comment", CommentController::class);
+
+Route::resource("/onlineclasses", ClassController::class);
+
