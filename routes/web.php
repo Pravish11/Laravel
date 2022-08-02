@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ClassController;
+use App\Http\Controllers\UserWkController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -46,4 +48,6 @@ Route::resource("/student", StudentController::class);
 Route::resource("/comment", CommentController::class);
 
 Route::resource("/onlineclasses", ClassController::class);
+
+Route::resource("/users", UserWkController::class);
 

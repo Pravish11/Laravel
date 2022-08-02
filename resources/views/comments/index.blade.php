@@ -23,6 +23,7 @@
                                     <th>#</th>
                                     <th>Date Posted</th>
                                     <th>Comment</th>
+                                    <th>Rating</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>

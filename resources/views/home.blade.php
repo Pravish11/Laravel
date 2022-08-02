@@ -11,6 +11,7 @@ session_start();
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Xtreme Fitness</title>
   <link rel="stylesheet" href="{{url('css/mystyle.css')}}">
+  <link rel="icon" href="{{'images/nav_bar_logo.png'}}" type="image/x-icon">
   <style>
     body {
       font-family: sans-serif;
